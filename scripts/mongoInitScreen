@@ -8,24 +8,24 @@ if [ -z ${STY} ];
   else
     # define port from screen sessionName
     echo "Checking your port out"
-    MONGO_PORT=$(echo $STY | sed -e 's/.*\.mongo\.//');
+    mongo_port=$(echo $STY | sed -e 's/.*\.mongo\.//');
 fi
 
 # 3 member set set-up, ports tied to sets
-case $MONGO_PORT in
+case $mongo_port in
   *[^0-9]*) 
     echo "Port is not an integer"
     exit 1;;
   "27017")
-    REPLICA_SET=0;;
+    replica_set=0;;
   "27018")
-    REPLICA_SET=1;;
+    replica_set=1;;
   "27019")
-    REPLICA_SET=2;;
+    replica_set=2;;
 esac
 
 # make sure the port is set
-if [ -z ${REPLICA_SET} ]
+if [ -z ${replica_set} ]
   then
     echo "Invalid Port use"
     echo "Consider 27017, 27018, 27019 in the right named screen session: \`screen -ls\`"
@@ -33,6 +33,13 @@ if [ -z ${REPLICA_SET} ]
 fi
 
 echo "Running mongod... "
-echo "mongod --port $MONGO_PORT --dbpath /srv/mongodb/rs0-${REPLICA_SET} --replSet rs0 --smallfiles --oplogSize 128"
-mongod --port $MONGO_PORT --dbpath /srv/mongodb/rs0-${REPLICA_SET} --replSet rs0 --smallfiles --oplogSize 128
+echo "mongod --port $mongo_port --dbpath /srv/mongodb/rs0-${replica_set} --replSet rs0 --smallfiles --oplogSize 128 --keyFile '/srv/mongodb/keyfile'"
+
+mongod --port $mongo_port \
+  --dbpath /srv/mongodb/rs0-${replica_set} \
+  --replSet rs0 \
+  --smallfiles \
+  --oplogSize 128 \
+  --keyFile '/srv/mongodb/keyfile'
+
 

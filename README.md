@@ -38,7 +38,6 @@ are
 
 ``` 
 $ git clone https://github.com/digitalanimal/mongoDB-tools
-
 ```
 
 Set up screen sessions, you need a session per replica set, to look like
@@ -62,8 +61,7 @@ $ ./mongoDB-tools/scripts/mongoInitScreen
 Checking your port out
 Running mongod...
 mongod --port 27019 --dbpath /srv/mongodb/rs0-2 --replSet rs0
---smallfiles --oplogSize 128
-
+--smallfiles --oplogSize 128 --keyFile '/srv/mongodb/keyfile'
 ```
 
 Detach the screen and leave mongod running ``` CTRL-a d ```
